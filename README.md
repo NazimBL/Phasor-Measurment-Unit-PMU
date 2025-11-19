@@ -38,13 +38,13 @@ The STM32 acts as the master, communicating with the ADE7880 via SPI for data ac
 
 The firmware is developed using **MikroC PRO for ARM**. To handle the complexity of the metrology and communication modules, I developed modular drivers that abstract the low-level register operations.
 
-### 1. ADE7880 Library (Metrology)
-Interfacing with the **Analog Devices ADE7880** is challenging because its DSP registers vary in length (8, 16, 24, and 32 bits). [cite_start]I wrote a custom library (`ADE7880.c`) to handle these SPI transactions automatically [cite: 470-473].
+###  ADE7880 Library (Metrology)
+Interfacing with the **Analog Devices ADE7880** is challenging because its DSP registers vary in length (8, 16, 24, and 32 bits). I wrote a custom library (`ADE7880.c`) to handle these SPI transactions automatically.
 
 **Key Features:**
-* [cite_start]**Multi-bitwidth SPI Wrapper:** Automatically handles 8/16/24/32-bit read/write operations to DSP registers [cite: 526-528].
-* [cite_start]**DSP Initialization:** Configures the `Run` register and DSP offsets [cite: 565-572].
-* [cite_start]**Measurement Abstraction:** Simple functions to get human-readable values (RMS, Power, Phase Angle) [cite: 533-537].
+* **Multi-bitwidth SPI Wrapper:** Automatically handles 8/16/24/32-bit read/write operations to DSP registers.
+* **DSP Initialization:** Configures the `Run` register and DSP offsets.
+* **Measurement Abstraction:** Simple functions to get human-readable values (RMS, Power, Phase Angle).
 
 **Usage Example:**
 The `getVRMS` function abstracts the SPI complexity to read the Root Mean Square voltage for a specific phase (A, B, or C):
