@@ -1,6 +1,5 @@
 # Low-Cost M-Class Phasor Measurement Unit (PMU)
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Standard](https://img.shields.io/badge/IEEE-C37.118-green.svg)
 ![Hardware](https://img.shields.io/badge/Hardware-STM32%20%7C%20ADE7880-orange)
 
