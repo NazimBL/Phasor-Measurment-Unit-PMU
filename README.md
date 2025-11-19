@@ -34,43 +34,33 @@ The STM32 acts as the master, communicating with the ADE7880 via SPI for data ac
 
 ---
 
-1. ADE7880 Library (Metrology)
+## 1. ADE7880 Library (Metrology)
 Interfacing with the Analog Devices ADE7880 is challenging because its DSP registers vary in length (8, 16, 24, and 32 bits). I wrote a custom library (ADE7880.c) to handle these SPI transactions automatically.
 
-Key Features:
+**Key Features:**
+-Multi-bitwidth SPI Wrapper: Automatically handles 8/16/24/32-bit read/write operations to DSP registers .
+-DSP Initialization: Configures the Run register and DSP offsets .
+-Measurement Abstraction: Simple functions to get human-readable values (RMS, Power, Phase Angle) .
 
-
-Multi-bitwidth SPI Wrapper: Automatically handles 8/16/24/32-bit read/write operations to DSP registers .
-
-
-DSP Initialization: Configures the Run register and DSP offsets .
-
-
-Measurement Abstraction: Simple functions to get human-readable values (RMS, Power, Phase Angle) .
-
-Usage Example: The getVRMS function abstracts the SPI complexity to read the Root Mean Square voltage for a specific phase (A, B, or C):
+**Usage Example:** The getVRMS function abstracts the SPI complexity to read the Root Mean Square voltage for a specific phase (A, B, or C):
 
 C
 
-// From library/ADE7880.c
+// From ade7880.c
 unsigned long getVRMS(char phase) {
-    if (phase == 0) return ADE_Read32(AVRMS); // Reads 32-bit register at 0x43C1
+    if (phase == 0) return ADE_Read32(AVRMS); // Reads 32-bit register for Phase A
     else if (phase == 1) return ADE_Read32(BVRMS);
     else return ADE_Read32(CVRMS);
 }
-2. SIM808 Library (GPS & GPRS)
+
+## 2. SIM808 Library (GPS & GPRS)
 This library (SIM808.c) manages the UART communication with the popular SIM808 module. It handles the AT command sequences required to initialize GPS, parse NMEA sentences, and open UDP sockets .
 
-Key Functions:
+**Key Functions:**
 
-
-GPS_Setup(): Powers on the GPS engine and performs a cold reset to ensure satellite fix.
-
-
-GPRS_Config(): Configures the APN (e.g., "ooredoo") and establishes the GPRS context.
-
-
-Send_UDP(): Packages the PMU data frame and transmits it to the server IP/Port.
+-GPS_Setup(): Powers on the GPS engine and performs a cold reset to ensure satellite fix.
+-GPRS_Config(): Configures the APN (e.g., "ooredoo") and establishes the GPRS context.
+-Send_UDP(): Packages the PMU data frame and transmits it to the server IP/Port.
 
 Usage Flow:
 
@@ -89,11 +79,7 @@ The core innovation of this PMU is the precise timing. The system does not rando
 
 
 GPS PPS Signal: The SIM808 generates a Pulse Per Second (PPS) signal when it has a satellite fix.
-
-
 ISR Trigger: This signal triggers an external interrupt on the STM32 (PPS_ISR).
-
-
 Atomic Sampling: The ISR immediately samples all phasors from the ADE7880 to ensure the timestamp is perfectly aligned with UTC seconds.
 
 Interrupt Service Routine (ISR):
